@@ -36,6 +36,10 @@ if "task_list" not in st.session_state:
 if "task_input" not in st.session_state:
     st.session_state["task_input"] = ""
 
+# Initialize a session state for showing edit input
+if "show_edit" not in st.session_state:
+    st.session_state["show_edit"] = {}
+
 # Input box to enter a new task
 task = st.text_input("Enter your task", value=st.session_state["task_input"])
 
@@ -53,7 +57,6 @@ if st.button("Add Task"):
             st.session_state["task_priorities"])  # Save tasks after adding
 
         # Clear task input after adding
-        # Updated: Clear the input after adding the task
         st.session_state["task_input"] = ""
 
 # Update the session state to reflect the current input
@@ -71,16 +74,33 @@ for i, t in enumerate(st.session_state["task_list"]):
         st.write(f"{i + 1}. {t} - {task_priority} Priority")
 
     with col2:
-        if st.button(f"Edit {t}", key=f"edit_{i}"):
-            new_task = st.text_input(f"Edit Task {t}", value=t)
-            if st.button(f"Update Task {i}"):
-                st.session_state["task_list"][i] = new_task
-                # Update priority for the new task name
-                st.session_state["task_priorities"][new_task] = st.session_state["task_priorities"].pop(
-                    t)
-                save_tasks(
-                    st.session_state["task_list"],
-                    st.session_state["task_priorities"])  # Save updated tasks
+        # Toggle visibility for editing
+        if st.button(f"Edit {t}", key=f"edit_button_{i}"):
+            # Toggle edit visibility
+            st.session_state["show_edit"][i] = not st.session_state["show_edit"].get(
+                i, False)
+
+        # Only show edit fields if the button was clicked
+        if st.session_state["show_edit"].get(i, False):
+            new_task = st.text_input(
+                f"Edit Task {t}", value=t, key=f"edit_task_{i}")
+            new_priority = st.selectbox(
+                "Select new priority", [
+                    "Low", "Medium", "High"], index=[
+                    "Low", "Medium", "High"].index(task_priority), key=f"edit_priority_{i}")
+
+            if st.button(f"Update Task {i}", key=f"update_{i}"):
+                if new_task:  # Ensure the new task is not empty
+                    # Update task list and priorities
+                    st.session_state["task_list"][i] = new_task
+                    # Update the priority for the new task name
+                    st.session_state["task_priorities"][new_task] = new_priority
+                    if new_task != t:  # If the task name has changed, remove the old name from priorities
+                        st.session_state["task_priorities"].pop(t, None)
+
+                    save_tasks(
+                        st.session_state["task_list"],
+                        st.session_state["task_priorities"])  # Save updated tasks
 
     with col3:
         if st.button(f"Delete {t}", key=f"delete_{i}"):
@@ -109,7 +129,6 @@ if st.button("Reset App"):
     save_tasks(
         st.session_state["task_list"],
         st.session_state["task_priorities"])  # Save the cleared state
-    # Removed st.experimental_rerun() as it's not available in your version
 
 # Divider between the To-Do list and the Calculator
 st.write("---")
