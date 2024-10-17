@@ -39,7 +39,6 @@ if st.button("Add Task"):
         # Ensure every task has a priority
         st.session_state["task_priorities"][task] = priority
         save_tasks(st.session_state["task_list"], st.session_state["task_priorities"])  # Save tasks after adding
-        st.experimental_rerun()  # Refresh the app state
 
 # Edit or delete task
 for i, t in enumerate(st.session_state["task_list"]):
@@ -59,14 +58,12 @@ for i, t in enumerate(st.session_state["task_list"]):
                 # Update priority for the new task name
                 st.session_state["task_priorities"][new_task] = st.session_state["task_priorities"].pop(t)
                 save_tasks(st.session_state["task_list"], st.session_state["task_priorities"])  # Save updated tasks
-                st.experimental_rerun()  # Refresh the app
 
     with col3:
         if st.button(f"Delete {t}", key=f"delete_{i}"):
             st.session_state["task_list"].pop(i)
             st.session_state["task_priorities"].pop(t, None)  # Remove from priorities if exists
             save_tasks(st.session_state["task_list"], st.session_state["task_priorities"])  # Save after deletion
-            st.experimental_rerun()  # Refresh the app
 
 # Show remaining tasks
 if st.session_state["task_list"]:
@@ -82,7 +79,6 @@ if st.button("Reset App"):
     st.session_state['task_list'] = []  # Clear the task list
     st.session_state['task_priorities'] = {}  # Clear the task priorities
     save_tasks(st.session_state["task_list"], st.session_state["task_priorities"])  # Save the cleared state
-    st.experimental_rerun()  # Reset session state to reflect the reset
 
 # Divider between the To-Do list and the Calculator
 st.write("---")
