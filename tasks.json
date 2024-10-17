@@ -1,1 +1,8 @@
-[]
+{
+    "tasks": ["Task 1", "Task 2"],
+    "priorities": {
+        "Task 1": "High",
+        "Task 2": "Medium"
+    }
+}
+
