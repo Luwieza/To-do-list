@@ -1,23 +1,27 @@
-import streamlit as st
+"""
+This module provides an enhanced to-do list application using Streamlit.
+"""
+
 import json
+import streamlit as st
+
 
 # Function to save tasks to a file
-
-
 def save_tasks(task_list, task_priorities):
-    with open("tasks.json", "w") as file:
+    """Save tasks and their priorities to a JSON file."""
+    with open("tasks.json", "w", encoding='utf-8') as file:
         data = {
             "tasks": task_list,
             "priorities": task_priorities
         }
         json.dump(data, file)
 
+
 # Function to load tasks from a file
-
-
 def load_tasks():
+    """Load tasks and their priorities from a JSON file."""
     try:
-        with open("tasks.json", "r") as file:
+        with open("tasks.json", "r", encoding='utf-8') as file:
             data = json.load(file)
             return data.get("tasks", []), data.get("priorities", {})
     except FileNotFoundError:
@@ -30,7 +34,9 @@ st.title("Enhanced To-Do List")
 # Initialize session state for task list and task priorities if not
 # already created
 if "task_list" not in st.session_state:
-    st.session_state["task_list"], st.session_state["task_priorities"] = load_tasks()
+    task_list, task_priorities = load_tasks()
+    st.session_state["task_list"] = task_list
+    st.session_state["task_priorities"] = task_priorities
 
 # Initialize session state for task input
 if "task_input" not in st.session_state:
@@ -46,18 +52,21 @@ task = st.text_input("Enter your task", value=st.session_state["task_input"])
 # Priority input for tasks
 priority = st.selectbox("Select priority", ["Low", "Medium", "High"])
 
-# Add task to the list
+# Add task to the list with validation
 if st.button("Add Task"):
-    if task:
+    if not task:
+        st.error("Task cannot be empty!")
+    elif task in st.session_state["task_list"]:
+        st.error("Task already exists!")
+    else:
         st.session_state["task_list"].append(task)
-        # Ensure every task has a priority
         st.session_state["task_priorities"][task] = priority
         save_tasks(
             st.session_state["task_list"],
-            st.session_state["task_priorities"])  # Save tasks after adding
-
-        # Clear task input after adding
+            st.session_state["task_priorities"]
+        )
         st.session_state["task_input"] = ""
+        st.success(f"Task '{task}' added successfully!")
 
 # Update the session state to reflect the current input
 st.session_state["task_input"] = task
@@ -66,69 +75,78 @@ st.session_state["task_input"] = task
 for i, t in enumerate(st.session_state["task_list"]):
     col1, col2, col3 = st.columns(3)
 
-    # Ensure task has a priority before displaying
-    task_priority = st.session_state["task_priorities"].get(
-        t, "Low")  # Default to "Low" if priority is missing
+    task_priority = st.session_state["task_priorities"].get(t, "Low")
 
     with col1:
         st.write(f"{i + 1}. {t} - {task_priority} Priority")
 
     with col2:
-        # Toggle visibility for editing
-        if st.button(f"Edit {t}", key=f"edit_button_{i}"):
-            # Toggle edit visibility
-            st.session_state["show_edit"][i] = not st.session_state["show_edit"].get(
-                i, False)
+        button_label = f"Edit {t}"
+        button_key = f"edit_button_{i}"
 
-        # Only show edit fields if the button was clicked
-        if st.session_state["show_edit"].get(i, False):
-            new_task = st.text_input(
-                f"Edit Task {t}", value=t, key=f"edit_task_{i}")
-            new_priority = st.selectbox(
-                "Select new priority", [
-                    "Low", "Medium", "High"], index=[
-                    "Low", "Medium", "High"].index(task_priority), key=f"edit_priority_{i}")
+        if st.button(button_label, key=button_key):
 
-            if st.button(f"Update Task {i}", key=f"update_{i}"):
-                if new_task:  # Ensure the new task is not empty
-                    # Update task list and priorities
+            if st.session_state["show_edit"].get(i, False):
+                new_task = st.text_input(
+                    f"Edit Task {t}", value=t, key=f"edit_task_{i}")
+                new_priority = st.selectbox(
+                    "Select new priority",
+                    ["Low", "Medium", "High"],
+                    index=["Low", "Medium", "High"].index(task_priority),
+                    key=f"edit_priority_{i}"
+                )
+
+                if st.button(f"Update Task {i}", key=f"update_{i}"):
+                    if not new_task:
+                        st.error("Task cannot be empty!")
+                elif (
+                    new_task in st.session_state["task_list"]
+                    and new_task != t
+                ):
+                    st.error("Task already exists!")
+                else:
                     st.session_state["task_list"][i] = new_task
-                    # Update the priority for the new task name
-                    st.session_state["task_priorities"][new_task] = new_priority
-                    if new_task != t:  # If the task name has changed, remove the old name from priorities
-                        st.session_state["task_priorities"].pop(t, None)
+                    st.session_state["task_priorities"][
+                        new_task
+                    ] = new_priority
+                    if new_task != t:
 
+                        st.session_state["task_priorities"].pop(t, None)
                     save_tasks(
                         st.session_state["task_list"],
-                        st.session_state["task_priorities"])  # Save updated tasks
+                        st.session_state["task_priorities"]
+                    )
+                    st.success(f"Task '{t}' updated successfully!")
 
     with col3:
         if st.button(f"Delete {t}", key=f"delete_{i}"):
             st.session_state["task_list"].pop(i)
-            st.session_state["task_priorities"].pop(
-                t, None)  # Remove from priorities if exists
+            st.session_state["task_priorities"].pop(t, None)
             save_tasks(
                 st.session_state["task_list"],
-                st.session_state["task_priorities"])  # Save after deletion
+                st.session_state["task_priorities"]
+            )
+            st.success(f"Task '{t}' deleted successfully!")
 
 # Show remaining tasks
 if st.session_state["task_list"]:
     st.write("Remaining Tasks:")
     for task in st.session_state["task_list"]:
-        task_priority = st.session_state["task_priorities"].get(
-            task, "Low")  # Default to "Low"
+        task_priority = st.session_state["task_priorities"].get(task, "Low")
         st.write(f"- {task} ({task_priority} Priority)")
 else:
     st.write("No remaining tasks.")
 
 # Reset button to clear all tasks
 if st.button("Reset App"):
-    st.session_state['task_list'] = []  # Clear the task list
-    st.session_state['task_priorities'] = {}  # Clear the task priorities
-    st.session_state["task_input"] = ""  # Clear task input
+    st.session_state['task_list'] = []
+    st.session_state['task_priorities'] = {}
+    st.session_state["task_input"] = ""
     save_tasks(
         st.session_state["task_list"],
-        st.session_state["task_priorities"])  # Save the cleared state
+        st.session_state["task_priorities"]
+    )
+    st.success("All tasks have been reset.")
 
 # Divider between the To-Do list and the Calculator
 st.write("---")
@@ -143,22 +161,26 @@ num2 = st.number_input("Enter the second number", value=0.0, step=1.0)
 # Select the operation
 operation = st.selectbox(
     "Choose an operation", [
-        "Add", "Subtract", "Multiply", "Divide"])
+        "Add", "Subtract", "Multiply", "Divide"
+    ]
+)
+
+# Initialize CALCULATION_RESULT
+calculation_result = None
 
 # Perform the calculation based on the selected operation
-result = None
 if operation == "Add":
-    result = num1 + num2
+    calculation_result = num1 + num2
 elif operation == "Subtract":
-    result = num1 - num2
+    calculation_result = num1 - num2
 elif operation == "Multiply":
-    result = num1 * num2
+    calculation_result = num1 * num2
 elif operation == "Divide":
     if num2 != 0:
-        result = num1 / num2
+        calculation_result = num1 / num2
     else:
         st.error("Cannot divide by zero!")
 
-# Display the result
-if result is not None:
-    st.write(f"Result: {result}")
+# Display results
+if calculation_result is not None:
+    st.write(f"Result: {calculation_result}")
