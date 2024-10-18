@@ -7,12 +7,12 @@ import streamlit as st
 
 
 # Function to save tasks to a file
-def save_tasks(task_list, task_priorities):
+def save_tasks(task_list_param, task_priorities_param):
     """Save tasks and their priorities to a JSON file."""
     with open("tasks.json", "w", encoding='utf-8') as file:
         data = {
-            "tasks": task_list,
-            "priorities": task_priorities
+            "tasks": task_list_param,
+            "priorities": task_priorities_param
         }
         json.dump(data, file)
 
@@ -81,42 +81,35 @@ for i, t in enumerate(st.session_state["task_list"]):
         st.write(f"{i + 1}. {t} - {task_priority} Priority")
 
     with col2:
-        button_label = f"Edit {t}"
-        button_key = f"edit_button_{i}"
+        # Toggle visibility for editing
+        if st.button(f"Edit {t}", key=f"edit_button_{i}"):
+            # Toggle edit visibility
+            show_edit_value = st.session_state["show_edit"].get(i, False)
+            st.session_state["show_edit"][i] = not show_edit_value
 
-        if st.button(button_label, key=button_key):
+        # Only show edit fields if the button was clicked
+        if st.session_state["show_edit"].get(i, False):
+            new_task = st.text_input(
+                f"Edit Task {t}", value=t, key=f"edit_task_{i}")
+            new_priority = st.selectbox(
+                "Select new priority", [
+                    "Low", "Medium", "High"], index=[
+                    "Low", "Medium", "High"].index(task_priority),
+                key=f"edit_priority_{i}"
+            )
 
-            if st.session_state["show_edit"].get(i, False):
-                new_task = st.text_input(
-                    f"Edit Task {t}", value=t, key=f"edit_task_{i}")
-                new_priority = st.selectbox(
-                    "Select new priority",
-                    ["Low", "Medium", "High"],
-                    index=["Low", "Medium", "High"].index(task_priority),
-                    key=f"edit_priority_{i}"
-                )
+        if st.button(f"Update Task {i}", key=f"update_{i}"):
+            if new_task:  # Ensure the new task is not empty
+                # Update task list and priorities
+                st.session_state["task_list"][i] = new_task
+                # Update the priority for the new task name
+                st.session_state["task_priorities"][new_task] = new_priority
+                if new_task != t:  # If the task name changed, remove old name
+                    st.session_state["task_priorities"].pop(t, None)
 
-                if st.button(f"Update Task {i}", key=f"update_{i}"):
-                    if not new_task:
-                        st.error("Task cannot be empty!")
-                elif (
-                    new_task in st.session_state["task_list"]
-                    and new_task != t
-                ):
-                    st.error("Task already exists!")
-                else:
-                    st.session_state["task_list"][i] = new_task
-                    st.session_state["task_priorities"][
-                        new_task
-                    ] = new_priority
-                    if new_task != t:
-
-                        st.session_state["task_priorities"].pop(t, None)
-                    save_tasks(
-                        st.session_state["task_list"],
-                        st.session_state["task_priorities"]
-                    )
-                    st.success(f"Task '{t}' updated successfully!")
+                save_tasks(
+                    st.session_state["task_list"],
+                    st.session_state["task_priorities"])  # Save updated tasks
 
     with col3:
         if st.button(f"Delete {t}", key=f"delete_{i}"):
@@ -166,21 +159,21 @@ operation = st.selectbox(
 )
 
 # Initialize CALCULATION_RESULT
-calculation_result = None
+CALCULATION_RESULT = None
 
 # Perform the calculation based on the selected operation
 if operation == "Add":
-    calculation_result = num1 + num2
+    CALCULATION_RESULT = num1 + num2
 elif operation == "Subtract":
-    calculation_result = num1 - num2
+    CALCULATION_RESULT = num1 - num2
 elif operation == "Multiply":
-    calculation_result = num1 * num2
+    CALCULATION_RESULT = num1 * num2
 elif operation == "Divide":
     if num2 != 0:
-        calculation_result = num1 / num2
+        CALCULATION_RESULT = num1 / num2
     else:
         st.error("Cannot divide by zero!")
 
 # Display results
-if calculation_result is not None:
-    st.write(f"Result: {calculation_result}")
+if CALCULATION_RESULT is not None:
+    st.write(f"Result: {CALCULATION_RESULT}")
