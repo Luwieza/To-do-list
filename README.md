@@ -1,8 +1,8 @@
-# Battleship Game - Testing details
+# To do list 2 - Testing details
 
 [Main README.md file](README.md)
 
-[View the live project here](https://damp-shore-53824-1295f2b0e633.herokuapp.com/)
+[View the live project here](https://battleship-game.herokuapp.com/)
 
 # Automated Testing
 
@@ -15,7 +15,7 @@
 
 No error founds on PEP8online.com
 
-![validator](assets/image/validator.png)
+![validator]()
 
 
 
