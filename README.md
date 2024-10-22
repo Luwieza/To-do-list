@@ -10,16 +10,6 @@
 
   - User Stories
   
-- How to Use
-
-- Features
-
-  - Existing Features
-  
-  - Future Features
-  
-- Design
-
 - Testing
 
 - Deployment
