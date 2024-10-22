@@ -1,90 +1,145 @@
-# To do list 2 - Testing details
+# TO-DO LIST APPLICATION
 
-[Main README.md file](README.md)
+# TABLE OF CONTANTS
 
-[View the live project here](https://battleship-game.herokuapp.com/)
+- Introduction
+    
+- User Experience (UX)
 
-# Automated Testing
+  - User Stories
+  
+- How to Use
 
+- Features
+
+  - Existing Features
+  
+  - Future Features
+  
+- Design
+
+- Testing
+
+- Deployment
+
+- Credits
+
+# Introduction
+
+
+This To-Do List Application is a practical task manager created for users to keep track of tasks, organize them by priority, and manage their daily activities. Built with Streamlit, the application allows users to add, edit, delete, and reset tasks. It also includes a built-in calculator for quick math operations.
+
+[View the live project here](https://damp-shore-53824-1295f2b0e633.herokuapp.com/)
+
+# User Experience (UX)
+
+User Stories:
+
+- As a user, I want to easily add new tasks to my to-do list.
+
+- As a user, I want to be able to assign priorities to my tasks.
+
+- As a user, I want to edit tasks if my plans change.
+
+- As a user, I want to delete tasks that are no longer needed.
+
+- As a user, I want a clear and simple interface to manage my tasks.
+
+- As a user, I want the app to save my task list, so I don’t lose it when I close the browser.
+
+# How to Use
+
+After launching the app, users can:
+
+1. Add tasks by entering the task name and setting a priority.
+
+2. Edit or delete tasks by interacting with buttons next to each task.
+
+3. Reset the task list if they want to start over (Double click).
+
+4. Use the calculator for quick calculations.
+
+# Features
+
+Existing Features
+
+- Add Task: Users can input a task name and set its priority (Low, Medium, High).
+
+- Edit Task: Users can update an existing task's name or priority.
+
+- Delete Task: Users can remove a task once it's completed.
+
+- Reset Task List: Users can clear all tasks with one button.
+
+- Priority System: Tasks are color-coded based on their priority.
+
+- Task Persistence: Tasks are saved using JSON for persistence between sessions.
+
+- Calculator: A built-in calculator for basic math operations (addition, subtraction, multiplication, division).
+
+# Future Features
+
+- Task deadlines and reminders.
+
+- Notifications for overdue tasks.
+
+- Integration with calendar apps.
+
+- Enhanced task filtering (by priority, due date).
+
+# Design
+
+- Interface: The interface is designed using Streamlit with an emphasis on simplicity and clarity, making task management efficient and easy.
+
+- Color Scheme: Each task is color-coded according to its priority level (green for low, yellow for medium, red for high).
+
+# Testing
+
+The application was manually tested by:
+
+- Adding, editing, and deleting tasks.
+
+- Resetting the task list.
+
+- Testing the calculator with different inputs.
+
+- Testing responsiveness on different screen sizes.
 
 ## Testing Lighthouse 
-![lighthouse](assets/image/lighthouse.png)
+![lighthouse](img/main_picture.png)
 
 ## Testing Validator PEP8
 
 
 No error founds on PEP8online.com
 
-![validator]()
+![validator](img/Testing.png)
 
+For further details, refer to the testing documentation https://pep8ci.herokuapp.com/
 
+# Deployment
 
-# Manual Testing
+This application was deployed using Heroku.
 
-### Testing User Experience (UX) stories:
+- Log into Heroku.
+    Create a new app.
 
-- as a user I want to be welcomed by a start screen with name of the game.
-    - Start screen with name of the game is possible immediately after pressing button 'RUN PROGRAM'.
-- as a user I want to be able to write my name in the begining of game.
-    - Entering a name is possible after the introductory text.
-- as a user i want the computer to create boards with ships hidden for me.
-    - Computer ships are not visible on the board from the beginning of the game.
-- as a user I want the board to be visible to me so I can see which ships are hits and which are misses. 
-    - On the board, hited ships are marked with:'x' and missed with: '.'
-- as a user, I want to see both boards so I can see everything I need to play.
-    - The player board and the computer board are visible to the user.
-- as a user, I want to see whose turn it is so I know when it's my turn.
-    - The user's turn is when the information is displayed there the user has to select a column and a row of a ship on the board.
-- as a user, I want to know who won.
-    - The final information at the end of the game shows the final result.
+- Connect the GitHub repository and deploy the app.
 
+- Set environment variables and ensure the proper buildpacks (Python) are configured.
 
-### Test Cases and Results
+You can view the live application here: https://damp-shore-53824-1295f2b0e633.herokuapp.com/
 
-1. Start Game:
-- After pressing 'RUN PROGRAM':
-    - The introductory text is shown.
-    - The drawing of a ship is shown.
-    - An option is displayed to choose to see instructions or start the game:
-        - 1. By pressing 1 the Battleship game start.
-            - The text 'Please, enter your name:' is shown.
-                - After pressing a name, the following message is displayed: 'Hello ... and welcome in my game!'
-        - 2. By pressing 2 the rules of the game are shown.
-            - The text : 'press enter to start a game' is shown.
-                - The text 'Please, enter your name:' is shown.
-                    - After pressing a name, the following message is displayed: 'Hello ... and welcome in my game!'
-                        - Loading of the game is displayed
-                        - The game board is shown.
-        - 3. By pressing someting else, following message: 'Inorrect!!! You entered: {option}. Please enter 1 or 2.' is displayed. 
-2. Play game:
-- The following information is displayed: 'GUESS LOCATIONS OF THE SHIPS ON THE COMPUTER'S GAME BOARD'.
-- The computer board is shown, the user is supposed to guess where the computer ships are located.
-     - The following message is displayed:'Please, choose the row 1-9 of the ship:
-        - when the user select a number except 1-9, the following message is displayed: '{the number} is wrong! Incorrect! You should choose 1, 2, 3, 4, 5, 6 ,7, 8 or 9'.
-         - when the user select a number between 1-9, the board game is shown with a ship is marked of the user.
-     - The following message is displayed:'Please, choose a letter between A-I.'
-        - when the user select a letter except A-I, the fellowing message is displayed: '{the letter} is wrong! Incorrect! You should choose A, B, C, D, E, F, G, H or I'. 
-    - When the user enters a letter and number where the ship exists on the computer board, the message: 'Well done!! You hit a ship!' is displayed, and this place is marked with : '★'. 
-    - When the user enters a letter and number where the ship not exists on the computer board, the message: 'You missed!' is displayed, and this place is marked with : '-'.
-    - When the user enters a letter and number in a location where a ship has already been hit before, the following message is shown: 'You have already guessed that place!'. 
-    - After a user made a choice, a message 'Press enter to continue'is displayed.
-    - A message is displayed: 'The computer guessed row {number of row} and column {letter of column}'.
-    - Futher message is displayed: 'Your battleship has been hit! or 'The computer missed!'.
-    - Futher message is displayed: 'You have {number of tries} chances left!
-    - The user has only 20 tries to guess where the ships are located.
-    - Futher message is displayed: "To continue press 'ok' otherwise press 'end game'.
-        - When a user press a word except 'ok' or 'end game', fellowing message is displayed: 'Incorrect! You should press 'ok' or 'end game'.
-        - When a user press 'ok', the game will continue.
-        - When a user press 'end game', the game ends and the final message is displayed.
+# Credits
 
-    
-4. End game:
-- After 20 chances to guess the ships on the board, the game ends and the message: 'You ran out of turns, the game is over'. 'GAME OVER! Thank you for plaing ' is shown.
-- When the user guesses where all 10 ships are placed, the following message is shown:'Congratulations! "you have sunk all of the battleships! You have {number of tries} left."
-- When the user guesses where all 10 ships are placed, the following message is shown: 'The computer won!', 'GAME OVER! Thank you for plaing '.
-- After ending the game, the user has two options: 'Play the game again' or 'End game' 
-    - Be pressing 1, the user start to play a game from begining. 
-    - By pressing 2, the user ends the game. 
-    - By pressing something else, following message: 'You entered: {answer}. Please enter 1 or 2' is displayed. 
+- Streamlit Documentation: https://docs.streamlit.io/ for the framework.
 
+- [PEP8](https://pep8ci.herokuapp.com/#) - this page was used for checking my code for PEP8 requirements
 
+- [To do list- You Tube] (https://www.youtube.com/watch?v=frWARrEczb4)this tutorial was followed and some Python code was taken and adapted to my application.
+
+- Heroku Deployment Guide: For instructions on deploying Python applications.
+
+- Icons: Freepik for task list icons.
+
+- JSON Tutorial: For storing tasks persistently in a JSON file.
