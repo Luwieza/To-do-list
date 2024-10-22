@@ -1,5 +1,7 @@
 # TO-DO LIST APPLICATION
 
+![lighthouse](img/main_picture.png)
+
 # TABLE OF CONTANTS
 
 - Introduction
@@ -104,9 +106,6 @@ The application was manually tested by:
 - Testing the calculator with different inputs.
 
 - Testing responsiveness on different screen sizes.
-
-## Testing Lighthouse 
-![lighthouse](img/main_picture.png)
 
 ## Testing Validator PEP8
 
