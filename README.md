@@ -1,6 +1,6 @@
 # TO-DO LIST APPLICATION
 
-![lighthouse](img/main_picture.png)
+![lighthouse](img/main_scree.png)
 
 # TABLE OF CONTANTS
 
