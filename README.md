@@ -9,6 +9,16 @@
 - User Experience (UX)
 
   - User Stories
+
+- How to use
+
+- Features
+
+  - Existing Features
+  
+  - Future Features
+
+- Design
   
 - Testing
 
@@ -123,7 +133,7 @@ You can view the live application here: https://damp-shore-53824-1295f2b0e633.he
 
 - Streamlit Documentation: https://docs.streamlit.io/ for the framework.
 
-- [PEP8](https://pep8ci.herokuapp.com/#) - this page was used for checking my code for PEP8 requirements
+- Code institude [PEP8](https://pep8ci.herokuapp.com/#) - this page was used for checking my code for PEP8 requirements
 
 - [To do list- You Tube] (https://www.youtube.com/watch?v=frWARrEczb4)this tutorial was followed and some Python code was taken and adapted to my application.
 
